@@ -2,6 +2,7 @@
 
 import os
 import unittest
+from unittest import mock
 
 from cloudmarker import util
 from cloudmarker.test import data_path
@@ -265,3 +266,12 @@ class UtilTest(unittest.TestCase):
     def test_pluralize_two_surplus_suffix(self):
         with self.assertRaises(util.PluralizeError):
             util.pluralize(2, 'sky', 'y', 'ies', 'foo')
+
+    def test_outline_az_sub(self):
+        sub = mock.Mock()
+        sub.subscription_id = 'id'
+        sub.display_name = 'name'
+        sub.state.value = 'state'
+        self.assertEqual(util.outline_az_sub(1, sub, 'tenant'),
+                         'subscription #1: id (name) (state); '
+                         'tenant: tenant')
